@@ -14,10 +14,10 @@ class BaseModel(ABC):
 
 
 class Regions(BaseModel):
-    def __init__(self, slug: Slug, name: str) -> None:
+    def __init__(self, slug: Slug, name: str, parent_slug: Slug = None) -> None:
         self.slug = slug
         self.name = name
-        self.parent_slug = set()  # type: set(Regions)
+        self.parent_slug = parent_slug
 
     def __repr__(self) -> str:
         return f"<Region {self.slug}"
@@ -71,16 +71,16 @@ class Ports(BaseModel):
 
 @dataclass(unsafe_hash=True)
 class Prices(BaseModel):
-    def __init__(self, origin_port: str, dest_port: str, date: date, price: Decimal) -> None:
-        self.origin_port = origin_port
-        self.dest_port = dest_port
+    def __init__(self, orig_code: str, dest_code: str, date: date, price: Decimal) -> None:
+        self.orig_code = orig_code
+        self.dest_code = dest_code
         self.date = date
         self.price = price
 
     def is_valid(self):
         validators = [
-            TypeChecker.is_code_valid(self.origin_port),
-            TypeChecker.is_code_valid(self.dest_port),
+            TypeChecker.is_code_valid(self.orig_code),
+            TypeChecker.is_code_valid(self.dest_code),
             TypeChecker.is_price_valid(self.price),
             TypeChecker.is_date_valid(self.date)
         ]
