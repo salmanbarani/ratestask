@@ -1,7 +1,7 @@
 from sqlalchemy import Table, MetaData, Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import mapper
 
-from src.ratestack.domain import models
+from ratestack.domain import models
 
 metadata = MetaData()
 

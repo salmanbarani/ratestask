@@ -1,5 +1,5 @@
 import abc
-from src.ratestack.domain import models
+from ratestack.domain import models
 from .utils import QueryStringCreator
 from .exceptions import SQLEXECUTIONERROR
 
@@ -55,23 +55,14 @@ class FakeRepository(AbstractRepository):
         This repository is only used for testing purpose
     """
 
-    def __init__(self, tuple_data) -> None:
-        self.regions = tuple_data[0]  # contains list of Regions
-        self.ports = tuple_data[1]  # contains list of Ports
-        self.prices = tuple_data[2]  # contains list of Prices
+    def __init__(self, data_to_return) -> None:
+        self.data_to_return = data_to_return
 
     def add(self, model: models.BaseModel):
-        if isinstance(models.Regions):
-            self.regions.append(model)
-
-        if isinstance(models.Ports):
-            self.ports.append(model)
-
-        if isinstance(models.Prices):
-            self.prices.append(model)
+        raise NotImplementedError
 
     def get_price(self, **kwargs):
-        return []
+        self.data_to_return
 
     def get_ports(self, **kwargs):
         """Not been implemented"""

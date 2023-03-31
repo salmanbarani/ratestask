@@ -17,9 +17,20 @@ def dump_data(test_func):
         session.execute(
             "INSERT INTO prices (orig_code, dest_code, date, price) VALUES "
             '("AA", "BB", "2022-05-05", 10), ("AA", "BB", "2022-05-05", 10),'
+            '("AA", "BB", "2022-05-05", 10), ("AA", "BB", "2022-05-05", 10),'
+            '("AA", "BB", "2022-05-05", 10), ("AA", "BB", "2022-05-05", 10),'
+            '("AA", "MM", "2022-05-06", 30), ("AA", "BB", "2022-05-06", 40),'
+            '("AA", "MM", "2022-05-06", 30), ("AA", "BB", "2022-05-06", 40),'
             '("AA", "MM", "2022-05-06", 30), ("AA", "BB", "2022-05-06", 40),'
             '("BB", "CC", "2022-04-05", 20), ("BB", "CC", "2022-04-05", 40),'
-            '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40)'
+            '("BB", "CC", "2022-04-05", 20), ("BB", "CC", "2022-04-05", 40),'
+            '("BB", "CC", "2022-04-05", 20), ("BB", "CC", "2022-04-05", 40),'
+            '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40),'
+            '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40),'
+            '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40),'
+            '("MM", "FF", "2022-12-19", 20)'
+
+
         )
         return test_func(session)
     return wrapper
@@ -27,6 +38,7 @@ def dump_data(test_func):
 
 def dump_regions(test_func):
     def wrapper(session):
+
         session.execute(
             "INSERT INTO regions (slug, name, parent_slug) VALUES "
             '("root", "root region", NULL),'

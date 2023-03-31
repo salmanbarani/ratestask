@@ -1,15 +1,8 @@
-from src.ratestack.domain.models import Ports, Prices, Regions
-from src.ratestack.adapters.repository import SqlAlchemyRepository
+from ratestack.domain.models import Ports, Prices, Regions
+from ratestack.adapters.repository import SqlAlchemyRepository
 import pytest
 from datetime import date
 from tests.utils import dump_data
-
-
-def insert_sample_record_in_prices(session):
-    session.execute(
-        "INSERT INTO prices (orig_code, dest_code, date, price) VALUES "
-        '("ABC", "DFG", "2022-05-06", 20), ("ABC", "DFG", "2023-04-05", 45)'
-    )
 
 
 def test_repository_can_save_regions(session):
@@ -69,7 +62,8 @@ def test_repository_get_price_by_date(session):
 def test_repository_get_price_by_date_from(session):
     data = {"date_from": "2022-05-06"}
     repo = SqlAlchemyRepository(session)
-    assert repo.get_price(**data) == [(35.0, '2022-05-06')]
+    assert repo.get_price(
+        **data) == [(35.0, '2022-05-06'), (None, '2022-12-19')]
 
 
 @dump_data
@@ -116,9 +110,9 @@ def test_repository_get_price_by_destination_region_slug(session):
 def test_repository_get_price_by_no_params(session):
     repo = SqlAlchemyRepository(session)
     result = repo.get_price()
-    assert len(result) == 5
+    assert len(result) == 6
     stored_dates = {"2022-05-05", "2022-05-06", "2022-04-05",
-                    "2022-04-06", "2022-04-08"}
+                    "2022-04-06", "2022-04-08", "2022-12-19"}
     for prices in result:
         assert prices[1] in stored_dates
 

@@ -2,7 +2,7 @@ import os
 
 
 def get_postgres_uri():
-    return "postgresql://postgres:ratestask@localhost:5432/postgres"
+    return "postgresql://postgres:ratestask@postgres:5432/postgres"
 
 
 def get_api_url():

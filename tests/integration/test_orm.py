@@ -1,4 +1,4 @@
-from src.ratestack.domain.models import Ports, Prices, Regions
+from ratestack.domain.models import Ports, Prices, Regions
 import pytest
 from tests.utils import dump_ports, dump_prices, dump_regions
 

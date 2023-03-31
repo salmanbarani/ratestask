@@ -35,7 +35,7 @@ class Regions(BaseModel):
 
     def add_parent_region(self, region):
         if region.is_valid() and self != region:
-            self.parent_slug.add(region)
+            self.parent_slug = region
         else:
             raise InvalidRegionException()
 
