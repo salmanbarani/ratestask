@@ -19,7 +19,7 @@ dfdd4c8e4dc5   ratestask-postgres   "docker-entrypoint.s…"   5 minutes ago   U
 
 - we need conainer id of `ratestask-postgres` which is `dfdd4c8e4dc5`, yours might be different. we need it to connect to postgresql.<br>
 
-* copy `CONTAINER ID` of `ratestask-postgres` in your clipboard and paset it in the `<container-id>` section of below command
+* copy `CONTAINER ID` of `ratestask-postgres` in your clipboard and paste it in the `<container-id>` section of below command
 * `docker exec -e PGPASSWORD=ratestask -it <container-id> psql -U postgres` then hit enter to run.
 * then type `ALTER TABLE prices RENAME COLUMN day TO date;`
 * then exit by typing `exit`.
@@ -44,9 +44,9 @@ here's a short descriptions of this project.
 
 1. This project was created using domain driven approach. `models` and `tests` are easy to read by any business person, so they can understand what's going on in the code.
 
-2. the whole project consists of seperate layers that are decoupled and can be used apart from each other and each layer can only talk( has dependency ) with below layers, the only dependency is on Abstraaction. for exmaple:
+2. the whole project consists of seperate layers that are decoupled and can be used apart from each other and each layer can only talk( has dependency ) with lower layers, the only dependency is on Abstraaction. for exmaple:
 
-- The flask main responsibility is processing requests, so it only talk with `service` layer and process the request. so `service` can be used by any other web frameworks.
+- The flask main responsibility is processing requests, and it's seperate from the main logic, so it only talk with `service` layer and process the request. so the main logic can be used by any other web frameworks.
 - `service` can only talk with `models` and and `data` layers.
 
 3.  `models` has no dependency with `database`, actually `database` has dependency with `models`. this has a huge beneift if we decided to change DB.
