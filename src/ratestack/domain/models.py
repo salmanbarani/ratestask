@@ -1,10 +1,11 @@
-from .utils import TypeChecker
-from .exceptions import InvalidRegionException
-from .types import Slug
-from datetime import date
-from decimal import Decimal
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from datetime import date
+from decimal import Decimal
+
+from .exceptions import InvalidRegionException
+from .types import Slug
+from .utils import TypeChecker
 
 
 class BaseModel(ABC):
@@ -71,7 +72,9 @@ class Ports(BaseModel):
 
 @dataclass(unsafe_hash=True)
 class Prices(BaseModel):
-    def __init__(self, orig_code: str, dest_code: str, date: date, price: Decimal) -> None:
+    def __init__(
+        self, orig_code: str, dest_code: str, date: date, price: Decimal
+    ) -> None:
         self.orig_code = orig_code
         self.dest_code = dest_code
         self.date = date
@@ -82,7 +85,7 @@ class Prices(BaseModel):
             TypeChecker.is_code_valid(self.orig_code),
             TypeChecker.is_code_valid(self.dest_code),
             TypeChecker.is_price_valid(self.price),
-            TypeChecker.is_date_valid(self.date)
+            TypeChecker.is_date_valid(self.date),
         ]
         print(self.price)
         return all(validators)

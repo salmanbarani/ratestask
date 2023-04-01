@@ -1,4 +1,5 @@
-from sqlalchemy import Table, MetaData, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import (Column, Date, ForeignKey, Integer, MetaData, String,
+                        Table)
 from sqlalchemy.orm import mapper
 
 from ratestack.domain import models
@@ -11,7 +12,6 @@ regions = Table(
     Column("slug", String, primary_key=True),
     Column("name", String(255), nullable=False),
     Column("parent_slug", ForeignKey("regions.slug")),
-
 )
 
 ports = Table(

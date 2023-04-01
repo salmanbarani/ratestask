@@ -1,18 +1,19 @@
-
 def dump_data(test_func):
     def wrapper(session):
         session.execute(
             "INSERT INTO regions (slug, name, parent_slug) VALUES "
             '("root", "root region", NULL),'
             '("first_level", "First Level", "root"),'
-            '("second_level", "Second Level", "first_level")')
+            '("second_level", "Second Level", "first_level")'
+        )
         session.execute(
             "INSERT INTO ports (code, name, parent_slug) VALUES "
             '("AA", "AA Port", "root"), ("BB", "BB Port", "root"),'
             '("CC", "CC Port", "root"), ("EE", "EE Port", "first_level"),'
             '("FF", "FF Port", "first_level"), ("GG", "GG Port", "first_level"),'
             '("DD", "DD Port", "second_level"),("QQ", "QQ Port", "second_level"),'
-            '("MM", "MM Port", "second_level")')
+            '("MM", "MM Port", "second_level")'
+        )
 
         session.execute(
             "INSERT INTO prices (orig_code, dest_code, date, price) VALUES "
@@ -29,10 +30,9 @@ def dump_data(test_func):
             '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40),'
             '("BB", "CC", "2022-04-08", 20), ("BB", "AA", "2022-04-06", 40),'
             '("MM", "FF", "2022-12-19", 20)'
-
-
         )
         return test_func(session)
+
     return wrapper
 
 
@@ -43,8 +43,10 @@ def dump_regions(test_func):
             "INSERT INTO regions (slug, name, parent_slug) VALUES "
             '("root", "root region", NULL),'
             '("first_level", "First Level", "root"),'
-            '("second_level", "Second Level", "first_level")')
+            '("second_level", "Second Level", "first_level")'
+        )
         return test_func(session)
+
     return wrapper
 
 
@@ -57,6 +59,7 @@ def dump_ports(test_func):
         )
         dump_region_decorator = dump_regions(test_func)
         return dump_region_decorator(session)
+
     return wrapper
 
 
@@ -69,4 +72,5 @@ def dump_prices(test_func):
         )
         dump_port_decorator = dump_ports(test_func)
         return dump_port_decorator(session)
+
     return wrapper

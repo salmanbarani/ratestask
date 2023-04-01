@@ -1,12 +1,12 @@
 import re
-from decimal import Decimal
 from datetime import datetime
+from decimal import Decimal
 
 
 class TypeChecker:
     @staticmethod
     def is_slug_valid(slug_param):
-        pattern = r'^[a-z0-9]+(?:_[a-z0-9]+)*$'
+        pattern = r"^[a-z0-9]+(?:_[a-z0-9]+)*$"
         return bool(re.match(pattern, slug_param))
 
     @staticmethod
@@ -20,7 +20,7 @@ class TypeChecker:
     @staticmethod
     def is_date_valid(date):
         try:
-            datetime.strptime(str(date), '%Y-%m-%d')
+            datetime.strptime(str(date), "%Y-%m-%d")
             return True
         except ValueError:
             return False

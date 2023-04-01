@@ -1,7 +1,9 @@
 import abc
+
 from ratestack.domain import models
-from .utils import QueryStringCreator
+
 from .exceptions import SQLEXECUTIONERROR
+from .utils import QueryStringCreator
 
 
 class AbstractRepository(abc.ABC):
@@ -14,19 +16,18 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_ports(self,  **kwargs):
+    def get_ports(self, **kwargs):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_price(self,  **kwargs):
+    def get_price(self, **kwargs):
         raise NotImplementedError
 
 
 class SqlAlchemyRepository(AbstractRepository):
     def __init__(self, session, creator=None) -> None:
         self.session = session
-        self.creator = QueryStringCreator(
-            self.session) if creator is None else creator
+        self.creator = QueryStringCreator(self.session) if creator is None else creator
 
     def add(self, model: models.BaseModel):
         """add works for all models"""
@@ -52,7 +53,7 @@ class SqlAlchemyRepository(AbstractRepository):
 
 class FakeRepository(AbstractRepository):
     """
-        This repository is only used for testing purpose
+    This repository is only used for testing purpose
     """
 
     def __init__(self, data_to_return) -> None:
