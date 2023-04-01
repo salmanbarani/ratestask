@@ -20,6 +20,5 @@ def test_query_prices():
             "date_to": "2016-01-10",
         },
     )
-    print(r.content)
     assert r.status_code == 200
     assert "rates" in json.loads(r.content)

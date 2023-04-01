@@ -1,4 +1,3 @@
-from ratestack.adapters.repository import AbstractRepository
 from ratestack.service_layer import unit_of_work
 
 

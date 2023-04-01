@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
 
 from ratestack import config
 from ratestack.adapters.repository import (AbstractRepository,

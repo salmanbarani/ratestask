@@ -1,137 +1,33 @@
-# Data definition
+# Rate Task
 
-We are providing you with a small set of simplified real-world data. A
-database dump is provided that includes the following information:
+This project was created using domain domain driven archetecture and is pip installable and can be used in any python project.
 
-## Ports
+## setup Steps
 
-Information about ports, including:
+1. clone the project you can type `git clone https://github.com/salmanbarani/ratestask.git` <br>
+2. then type `cd ratestask/`<br>
+3. then type `make build` type build the project then `make up` to run the project.
+4. your project now is running but before testing you need rename one column name( I didn't like the name), let's do it by hand.
 
-* 5-character port code
-* Port name
-* Slug describing which region the port belongs to
+- first type `docker ps` you must a prompt like this.<br>
 
-## Regions
-
-A hierarchy of regions, including:
-
-* Slug - a machine-readable form of the region name
-* The name of the region
-* Slug describing which parent region the region belongs to
-
-Note that a region can have both ports and regions as children, and the region
-tree does not have a fixed depth.
-
-## Prices
-
-Individual daily prices between ports, in USD.
-
-* 5-character origin port code
-* 5-character destination port code
-* The day for which the price is valid
-* The price in USD
-
-# Assignment: HTTP-based API
-
-Develop an [HTTP-based API](#task-1-http-based-api) capable of handling the GET request described below. Our stack is based on Flask, but you are free to choose any Python framework you like. All data returned is expected to be in JSON format. Please demonstrate your knowledge of SQL (as opposed to using ORM querying tools).
-
-
-Implement an API endpoint that takes the following parameters:
-
-* date_from
-* date_to
-* origin
-* destination
-
-and returns a list with the average prices for each day on a route between port codes *origin* and *destination*. Return an empty value (JSON null) for days on which there are less than 3 prices in total.
-
-Both the *origin, destination* params accept either port codes or region slugs, making it possible to query for average prices per day between geographic groups of ports.
-
-    curl "http://127.0.0.1/rates?date_from=2016-01-01&date_to=2016-01-10&origin=CNSGH&destination=north_europe_main"
-
-    [
-        {
-            "day": "2016-01-01",
-            "average_price": 1112
-        },
-        {
-            "day": "2016-01-02",
-            "average_price": 1112
-        },
-        {
-            "day": "2016-01-03",
-            "average_price": null
-        },
-        ...
-    ]
-
-# Requirements
-
-* Write the solution using Python and SQL, you can use an ORM but please
-  demonstrate some raw SQL
-
-* Keep your solution in a Version Control System of your
-  choice. *Provide the solution as a public repository that can be
-  easily cloned by our development team.*
-
-* Provide any instructions needed to set up the system in `README.md`.
-
-* Ensure the API handles errors and edge cases properly.
-
-* Use dates in YYYY-MM-DD format for the API. There is no need for more
-  complicated date processing.
-
-# Extra details
-
-* It usually takes 2 - 6 hours to complete this task for a developer with 2+ years of experience in building APIs with Python and SQL.
-
-* Our key evaluation criteria:
-    - Ease of setup and testing
-    - Code clarity and simplicity
-    - Comments where appropriate
-    - Code organisation
-    - Tests
-
-* You are encouraged to modify or extend the database schema if you think a different model fits the task better.
-
-* If you have any questions, please don't hesitate to contact us
-
-* Please let us know how much time you spent on the task, and of any difficulties that you ran into.
-
-
-# Initial setup
-
-We have provided a simple Docker setup for you, which will start a
-PostgreSQL instance populated with the assignment data. You don't have
-to use it, but you might find it convenient. If you decide to use
-something else, make sure to include instructions on how to set it up.
-
-You can execute the provided Dockerfile by running:
-
-```bash
-docker build -t ratestask .
+```
+CONTAINER ID   IMAGE                COMMAND                  CREATED         STATUS                          PORTS                                       NAMES
+f766cbd5cf67   ratestask-app        "/bin/sh -c 'flask r…"   5 minutes ago   Up 3 minutes                    0.0.0.0:5005->80/tcp, :::5005->80/tcp       ratestask-app-1
+dfdd4c8e4dc5   ratestask-postgres   "docker-entrypoint.s…"   5 minutes ago   Up 5 minutes                    0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   postgres
 ```
 
-This will create a container with the name *ratestask*, which you can
-start in the following way:
+- we need conainer id of `ratestask-postgres` which is `dfdd4c8e4dc5`, yours might be different. we need it to connect to postgresql.<br>
 
-```bash
-docker run -p 0.0.0.0:5432:5432 --name ratestask ratestask
+* copy `CONTAINER ID` of `ratestask-postgres` in your clipboard and paset it in the `<container-id>` section of below command
+* `docker exec -e PGPASSWORD=ratestask -it <container-id> psql -U postgres` then hit run
+* then type `ALTER TABLE prices RENAME COLUMN day TO date;`
+* then exit by typing `exit`.
+* NOTE: it's a good idea to change above steps (changing column name) or such things in one scripts file, and run it in docker, I just add it here to make it clear what we changed from db.
+
+* now you can run tests by typing `make test` <br>
+* you request the endpoint in below command
+
 ```
-
-You can connect to the exposed Postgres instance on the Docker host IP address,
-usually *127.0.0.1* or *172.17.0.1*. It is started with the default user `postgres` and `ratestask` password.
-
-```bash
-PGPASSWORD=ratestask psql -h 127.0.0.1 -U postgres
+curl "http://127.0.0.1:5005/rates?date_from=2016-01-01&date_to=2016-01-10&origin=CNSGH&destination=north_europe_main"
 ```
-
-alternatively, use `docker exec` if you do not have `psql` installed:
-
-```bash
-docker exec -e PGPASSWORD=ratestask -it ratestask psql -U postgres
-```
-
-Keep in mind that any data written in the Docker container will
-disappear when it shuts down. The next time you run it, it will start
-with a clean state.

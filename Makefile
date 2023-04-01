@@ -31,6 +31,10 @@ up:
 down:
 	docker compose -f docker-compose.yml down
 
+down-v:
+	docker compose -f docker-compose.yml down -v
+
+
 show_logs:
 	docker compose -f docker-compose.yml logs
 

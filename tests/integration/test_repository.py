@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from sqlalchemy import text
 
 from ratestack.adapters.repository import SqlAlchemyRepository
 from ratestack.domain.models import Ports, Prices, Regions
@@ -13,7 +14,7 @@ def test_repository_can_save_regions(session):
     repo.add(region)
     session.commit()
 
-    rows = list(session.execute("SELECT slug, name, parent_slug FROM regions"))
+    rows = list(session.execute(text("SELECT slug, name, parent_slug FROM regions")))
     assert rows == [("SLUG_NAME", "Region Name", None)]
 
 
@@ -28,7 +29,7 @@ def test_repository_can_save_ports(session):
     repo.add(port)
     session.commit()
 
-    rows = list(session.execute("SELECT code, name, parent_slug FROM ports"))
+    rows = list(session.execute(text("SELECT code, name, parent_slug FROM ports")))
     assert rows == [("AME", "Port Name", "SLUG_NAME")]
 
 
@@ -46,7 +47,9 @@ def test_repository_can_save_prices(session):
     repo.add(price)
     session.commit()
 
-    rows = list(session.execute("SELECT orig_code, dest_code, date, price FROM prices"))
+    rows = list(
+        session.execute(text("SELECT orig_code, dest_code, date, price FROM prices"))
+    )
     assert rows == [("AME", "AME", str(date.today()), 50)]
 
 

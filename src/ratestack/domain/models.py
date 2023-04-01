@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -8,13 +7,7 @@ from .types import Slug
 from .utils import TypeChecker
 
 
-class BaseModel(ABC):
-    @abstractmethod
-    def is_valid(self):
-        raise NotImplementedError()
-
-
-class Regions(BaseModel):
+class Regions:
     def __init__(self, slug: Slug, name: str, parent_slug: Slug = None) -> None:
         self.slug = slug
         self.name = name
@@ -41,7 +34,7 @@ class Regions(BaseModel):
             raise InvalidRegionException()
 
 
-class Ports(BaseModel):
+class Ports:
     def __init__(self, code: str, name: str, parent_slug: Slug) -> None:
         self.code = code
         self.name = name
@@ -71,7 +64,7 @@ class Ports(BaseModel):
 
 
 @dataclass(unsafe_hash=True)
-class Prices(BaseModel):
+class Prices:
     def __init__(
         self, orig_code: str, dest_code: str, date: date, price: Decimal
     ) -> None:

@@ -1,14 +1,12 @@
 import abc
 
-from ratestack.domain import models
-
 from .exceptions import SQLEXECUTIONERROR
 from .utils import QueryStringCreator
 
 
 class AbstractRepository(abc.ABC):
     @abc.abstractmethod
-    def add(self, model: models.BaseModel):
+    def add(self, model):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -29,7 +27,7 @@ class SqlAlchemyRepository(AbstractRepository):
         self.session = session
         self.creator = QueryStringCreator(self.session) if creator is None else creator
 
-    def add(self, model: models.BaseModel):
+    def add(self, model):
         """add works for all models"""
         self.session.add(model)
 
@@ -59,7 +57,7 @@ class FakeRepository(AbstractRepository):
     def __init__(self, data_to_return) -> None:
         self.data_to_return = data_to_return
 
-    def add(self, model: models.BaseModel):
+    def add(self, model):
         raise NotImplementedError
 
     def get_price(self, **kwargs):

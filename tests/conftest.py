@@ -10,13 +10,13 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import clear_mappers, sessionmaker
 
 from src.ratestack import config
-from src.ratestack.adapters.orm import metadata, start_mappers
+from src.ratestack.adapters.orm import mapper_registry, start_mappers
 
 
 @pytest.fixture
 def in_memory_db():
     engine = create_engine("sqlite:///:memory:")
-    metadata.create_all(engine)
+    mapper_registry.metadata.create_all(engine)
     return engine
 
 
@@ -46,7 +46,7 @@ def wait_for_postgres_to_come_up(engine):
 def postgres_db():
     engine = create_engine(config.get_postgres_uri())
     wait_for_postgres_to_come_up(engine)
-    metadata.create_all(engine)
+    mapper_registry.metadata.create_all(engine)
     return engine
 
 

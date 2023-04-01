@@ -1,14 +1,14 @@
-from sqlalchemy import (Column, Date, ForeignKey, Integer, MetaData, String,
+from sqlalchemy import (Column, Date, ForeignKey, Integer, String,
                         Table)
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import registry
 
 from ratestack.domain import models
 
-metadata = MetaData()
+mapper_registry = registry()
 
 regions = Table(
     "regions",
-    metadata,
+    mapper_registry.metadata,
     Column("slug", String, primary_key=True),
     Column("name", String(255), nullable=False),
     Column("parent_slug", ForeignKey("regions.slug")),
@@ -16,7 +16,7 @@ regions = Table(
 
 ports = Table(
     "ports",
-    metadata,
+    mapper_registry.metadata,
     Column("code", String(5), primary_key=True),
     Column("name", String(2555), nullable=True),
     Column("parent_slug", ForeignKey("regions.slug")),
@@ -24,7 +24,7 @@ ports = Table(
 
 prices = Table(
     "prices",
-    metadata,
+    mapper_registry.metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("orig_code", ForeignKey("ports.code")),
     Column("dest_code", ForeignKey("ports.code")),
@@ -34,6 +34,6 @@ prices = Table(
 
 
 def start_mappers():
-    mapper(models.Regions, regions)
-    mapper(models.Ports, ports)
-    mapper(models.Prices, prices)
+    mapper_registry.map_imperatively(models.Regions, regions)
+    mapper_registry.map_imperatively(models.Ports, ports)
+    mapper_registry.map_imperatively(models.Prices, prices)

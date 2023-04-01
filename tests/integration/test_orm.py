@@ -1,4 +1,5 @@
 import pytest
+from sqlalchemy import text
 
 from ratestack.domain.models import Ports, Prices, Regions
 from tests.utils import dump_ports, dump_prices, dump_regions
@@ -36,7 +37,8 @@ def test_prices_mapper_can_load_prices(session):
 def test_relationship_between_tables(session):
 
     result = session.execute(
-        """
+        text(
+            """
     SELECT r.slug, r.name, r.parent_slug
     FROM prices p
     JOIN ports po ON p.orig_code = po.code
@@ -44,7 +46,8 @@ def test_relationship_between_tables(session):
     WHERE p.orig_code = :orig_code
     AND p.dest_code = :dest_code
     AND r.slug = :slug ;
-    """,
+    """
+        ),
         dict(orig_code="ABC", dest_code="DFG", slug="root"),
     )
 

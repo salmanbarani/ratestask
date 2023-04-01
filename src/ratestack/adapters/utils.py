@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from sqlalchemy import text
+
 
 class BaseCreator(ABC):
     @abstractmethod
@@ -23,7 +25,7 @@ class QueryStringCreator(BaseCreator):
         query_string = (
             f"SELECT code FROM ports WHERE code = '{code}' OR parent_slug = '{code}';"
         )
-        query = self.session.execute(query_string)
+        query = self.session.execute(text(query_string))
         result = "(" + ",".join(f"'{port[0]}'" for port in query.fetchall()) + ")"
         return result if result != "()" else False
 
@@ -44,7 +46,8 @@ class QueryStringCreator(BaseCreator):
 
         where_claus = " AND ".join(where_cs) if len(where_cs) > 0 else ""
         where_claus = "WHERE " + where_claus if where_claus else ""
-        return f"""
+        return text(
+            f"""
             SELECT 
             CASE 
                 WHEN COUNT(*) < 3 THEN NULL 
@@ -56,6 +59,7 @@ class QueryStringCreator(BaseCreator):
             GROUP BY date
             ORDER BY date;
            """
+        )
 
     def price_query_string_factory(self, **kwargs):
         return self._get_price_query_statement(**kwargs)
