@@ -4,6 +4,7 @@ from sqlalchemy import text
 
 
 class BaseCreator(ABC):
+    """Base factory to create query strings"""
     @abstractmethod
     def region_query_string_factory(**kwargs) -> str:
         raise NotImplementedError
@@ -26,7 +27,8 @@ class QueryStringCreator(BaseCreator):
             f"SELECT code FROM ports WHERE code = '{code}' OR parent_slug = '{code}';"
         )
         query = self.session.execute(text(query_string))
-        result = "(" + ",".join(f"'{port[0]}'" for port in query.fetchall()) + ")"
+        result = "(" + \
+            ",".join(f"'{port[0]}'" for port in query.fetchall()) + ")"
         return result if result != "()" else False
 
     def _get_price_query_statement(self, **kwargs):

@@ -23,9 +23,14 @@ class AbstractRepository(abc.ABC):
 
 
 class SqlAlchemyRepository(AbstractRepository):
+    """
+        For now this repository can add any model to db and retrieve data from prices table  
+    """
+
     def __init__(self, session, creator=None) -> None:
         self.session = session
-        self.creator = QueryStringCreator(self.session) if creator is None else creator
+        self.creator = QueryStringCreator(
+            self.session) if creator is None else creator
 
     def add(self, model):
         """add works for all models"""
